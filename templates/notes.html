@@ -1,0 +1,83 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'home.css' %}" />
+    
+  </head>
+  <body>
+    <div
+      class="card-container"
+      style="display: flex; flex-wrap: wrap"
+      id="card-container"
+    >
+      <!--One card-->
+      {% if notes %} {% for note in notes %}
+
+      <div
+        class="card"
+        style="
+          flex-direction: column;
+          width: 370px;
+          max-width: 370px;
+          background-color: rgb(167, 176, 176);
+        "
+      >
+        {% comment %} <div class="actions">
+          &nbsp;Actions <i class="fa fa-arrow-down" aria-hidden="true"></i>
+          <a
+            href="javascript:;"
+            onclick="document.getElementById('delete-btn{{password.id}}').click();"
+            class="action-item"
+            >Delete</a
+          >
+          <form hidden="true" action="." method="POST">
+            {% csrf_token %}
+            <input
+              type="text"
+              hidden="true"
+              name="password-id"
+              value="{{password.id}}"
+            />
+            <input type="submit" id="delete-btn{{password.id}}" name="delete" />
+          </form>
+        </div> {% endcomment %}
+
+
+        {% comment %} <img width="50" height="50" src="{{password.logo}}" alt="" /> {% endcomment %}
+        <i class="fa-solid fa-file-lines icon" style="font-size: 35px;"></i>
+        <h2 class="name" style="font-weight: bold; color: black;">{{note.topic}}</h2>
+        {% comment %} <input type="email" name="email" value="{{note.desc}}" /> {% endcomment %}
+        {% comment %} <p
+          type="password"
+          name="username"
+          value="{{password.password}}"
+        /> {% endcomment %}
+        <p style="font-size: 20px;">{{note.desc}}</p>
+      </div>
+
+      {% endfor %} {% else %}
+
+      <div class="start" id="start">
+        <h1>Hey There !</h1>
+        <h1>Let's start with Login</h1>
+        <button onclick="displayModal('login-container')">Login</button>
+      </div>
+
+      {% endif %}
+
+      <!--End-->
+    </div>
+
+    <script
+      src="https://kit.fontawesome.com/669656b653.js"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
+ 

@@ -1,0 +1,37 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    {% comment %} <link rel="stylesheet" href="./login-signup.css" /> {% endcomment %}
+    <link rel="stylesheet" href="{% static 'login-signup.css' %}">
+
+  </head>
+  <body>
+    {% if code %}
+    <div class="wrapper">
+      <h1>Login</h1>
+      <h1>Confirmation</h1>
+      <form action="/confirmation" role="form" method="POST">
+        {% csrf_token %}
+        <input type="text" name="code" placeholder="Confirmation Code" />
+        <input
+            type="text"
+            hidden="true"
+            name="user"
+            value="{{user.username}}"
+          />
+        <button type="submit" name="confirm-form" value="Confirm">Confirm</button>
+      </form>
+      <div class="member">
+        <p>Check your Gmail and</p>
+        <p>Enter the Confirmation Code</p>
+      </div>
+    </div>
+    {% endif %}
+  </body>
+</html>
