@@ -17,7 +17,7 @@
       id="card-container"
     >
       <!--One card-->
-      {% if notes %} {% for note in notes %}
+      {% if cards %} {% for card in cards %}
 
       <div
         class="card"
@@ -48,11 +48,13 @@
           </form>
         </div> {% endcomment %}
 
+        <i class="fa-solid fa-credit-card icon" style="font-size: 35px;"></i>
+        <h2 class="name" style="font-weight: bold; color: black;">{{card.bank_name}}</h2>
+        <h3 class="name" style="font-weight: bold; color: black;">{{card.holder_name}}</h3>
 
-        <i class="fa-solid fa-file-lines icon" style="font-size: 35px;"></i>
-        <h2 class="name" style="font-weight: bold; color: black;">{{note.topic}}</h2>
-
-        <p style="font-size: 20px;">{{note.desc}}</p>
+        <p style="font-size: 20px;">{{card.card_number}}</p>
+        <p style="font-size: 20px;">{{card.key}}</p>
+        <p style="font-size: 20px;">{{card.expiry_date}}</p>
       </div>
 
       {% endfor %} {% else %}

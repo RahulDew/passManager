@@ -9,37 +9,23 @@ from django.core.mail import send_mail
 from cryptography.fernet import Fernet
 from mechanize import Browser
 import favicon
-from .models import Password, Note
+from .models import Password, Note, Card
 from django.contrib.auth.decorators import login_required
 
-# from .models import Notes
+# html email required stuff
+# from django.core.mail import EmailMultiAlternatives # Main thingthis will help to send html email
+# from django.template.loader import render_to_string # helps to render stuff dynamically
+# from django.utils.html import strip_tags # so that we send content
 
 br = Browser()
 br.set_handle_robots(False)
 fernet = Fernet(settings.KEY.encode())
-# fernet = Fernet(settings.KEY.encode())
 
 
 
 # Create your views here.
 
-# def notes(request):
-#     if request.user.is_authenticated:
-#         user = request.user
-#         print(user)
-#         form = Notes(request.POST)
-#         print("1111111")
-#         if form.is_valid():
-#             # print(form.cleaned_data)
-#             print("222222")
-#             todo = form.save(commit=False)
-#             todo.user = user
-#             todo.save()
-#             print(todo)
-
-#             print("33333")
-#     return render(request, 'addnote.html')
-
+# signup view
 
 def signup(request):
     if request.method == 'POST':
@@ -76,11 +62,26 @@ def signup(request):
                     messages.error(request, msg)
                     return render(request, 'home.html')
 
+                    # # sending the html email as welcome email
+                    # html_content = render_to_string("email_template.html", {'title': 'Welcome Email'})
+                    # text_content = strip_tags(html_content)
+
+                    # welcome_email = EmailMultiAlternatives(
+                    #     "Welcome_testing",
+                    #     text_content,
+                    #     settings.EMAIL_HOST_USER,
+                    #     [email]
+                    # )
+
+                    # welcome_email.attatchaltranative(html_content, "text/html")
+                    # welcome_email.send()
+
     return render(request, 'signup.html')
     
 
 
 
+# login view
 
 def login(request):
     if request.method == 'POST':
@@ -111,6 +112,7 @@ def login(request):
     
 
 
+# confirmation view
 
 def confirmation(request):
     if request.method == 'POST':
@@ -130,6 +132,9 @@ def confirmation(request):
     return render(request, 'confirmation.html')
 
 
+
+# addpassword view
+
 def addpassword(request):
     if request.method == 'POST':
         if "add-password" in request.POST:
@@ -145,11 +150,6 @@ def addpassword(request):
             #get the logo of URL
             icon = favicon.get(url)[0].url
             # save data in database
-            print("\n\n\n")
-            print(encrypted_email)
-            print(encrypted_password)
-            print(title)
-            print(icon)
             new_password = Password.objects.create(
                 user = request.user,
                 name = title,
@@ -162,26 +162,71 @@ def addpassword(request):
             return render(request, 'home.html')
     return render(request, 'addpassword.html')
 
+
+# addnote view
+
 def addnote(request):
-    print("IF ME JAA NHI RAHA H !!!")
     if request.method == 'POST':
         if "add-notes" in request.POST:
         # url = request.POST.get("url")
-            print("IF ME JAA NHI RAHA H !!!")
-            topic = request.POST.get("title")
+            topic = request.POST.get("topic")
             desc = request.POST.get("desc")
-            print("ho rha h ")
-
-            new_note = Note.objects.create(user = request.user, topic = topic, desc = desc)
+            #encrypt data
+            encrypted_desc = fernet.encrypt(desc.encode())
+            # save data in database
+            new_note = Note.objects.create(user = request.user, topic = topic, desc = encrypted_desc.decode())
             msg = f"{topic} Note added successfully"
             messages.success(request, msg)
             return render(request, 'home.html')
-            # new_note.save()
     
-        print("\n\n\n")
-        print(topic)
-        print(desc)
     return render(request, 'addnote.html')
+
+
+#addcard view
+
+def addcard(request):
+    if request.method == 'POST':
+        if "add-card" in request.POST:
+            holder_name = request.POST.get("holder_name")
+            bank_name = request.POST.get("bank_name")
+            card_number = request.POST.get("card_number")
+            key = request.POST.get("key")
+            expiry_date = request.POST.get("expiry_date")
+
+            #encrypt data
+            encrypted_card_number = fernet.encrypt(card_number.encode())
+            encrypted_key = fernet.encrypt(key.encode())
+            encrypted_expiry_date = fernet.encrypt(expiry_date.encode())
+
+            # saving data in database
+            new_card = Card.objects.create(
+                user = request.user,
+                holder_name = holder_name,
+                bank_name = bank_name,
+                card_number = encrypted_card_number.decode(),
+                key = encrypted_key.decode(),
+                expiry_date = encrypted_expiry_date.decode(),
+            )
+            
+            # printing variables
+            print("\n\n\n")
+            print(holder_name)    # # these are just printing the data  
+            print(bank_name)      # # which will going to store in the database
+            print(encrypted_card_number)    
+            print(encrypted_key)
+            print(encrypted_expiry_date)
+
+            # printing message to home
+            msg = f"{bank_name} Card added successfully"
+            messages.success(request, msg)
+            return render(request, 'home.html')
+
+    return render(request, 'addcard.html')
+
+
+
+
+# notes view
 
 def notes(request):
     context = {}
@@ -189,13 +234,37 @@ def notes(request):
         notes = Note.objects.all().filter(user=request.user)
         for note in notes:
             note.topic = note.topic
-            note.desc = note.desc
+            note.desc = fernet.decrypt(note.desc.encode()).decode()
         context = {
             "notes": notes,
         }
 
     return render(request, 'notes.html', context)
 
+
+
+# cards view
+
+def cards(request):
+    context = {}
+    if request.user.is_authenticated:
+        cards = Card.objects.all().filter(user=request.user)
+        for card in cards:
+            card.holder_name = card.holder_name
+            card.bank_name = card.bank_name
+            card.card_number = fernet.decrypt(card.card_number.encode()).decode()
+            card.key = fernet.decrypt(card.key.encode()).decode()
+            card.expiry_date = fernet.decrypt(card.expiry_date.encode()).decode()
+            
+        context = {
+            "cards": cards,
+        }
+
+    return render(request, 'cards.html', context)
+
+
+
+# home view
 
 def home(request):
 

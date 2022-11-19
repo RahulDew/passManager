@@ -81,3 +81,40 @@ input:focus {
 .member p {
   margin: 5px auto;
 }
+
+
+
+ /* for setting placeholder color to white */
+
+input::-webkit-input-placeholder {
+  color: rgba(240, 248, 255, 0.746);
+}
+input:-moz-placeholder {
+  color: rgba(240, 248, 255, 0.746);
+  /* opacity: 1; */
+}
+input::-moz-placeholder {
+  color: rgba(240, 248, 255, 0.746);
+  /* opacity: 1; */
+}
+input:-ms-input-placeholder {
+  color: rgba(240, 248, 255, 0.746);
+}
+input::-ms-input-placeholder {
+  color: rgba(240, 248, 255, 0.746);
+}
+input::placeholder {
+  color: rgba(240, 248, 255, 0.746);
+}
+
+
+
+ /* for setting autofill color to green */
+
+/* input:-webkit-autofill,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px #0d2145 inset !important;
+  -webkit-text-fill-color: rgb(59, 224, 161) !important;
+  border: 1px solid rgb(42, 202, 141);
+} */

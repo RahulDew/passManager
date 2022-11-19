@@ -7,9 +7,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login</title>
-    {% comment %} <link rel="stylesheet" href="./login-signup.css" /> {% endcomment %}
-    <link rel="stylesheet" href="{% static 'login-signup.css' %}">
-
+    {% comment %}
+    <link rel="stylesheet" href="./login-signup.css" />
+    {% endcomment %}
+    <link rel="stylesheet" href="{% static 'login-signup.css' %}" />
   </head>
   <body>
     <div class="wrapper">
@@ -21,7 +22,7 @@
         <button type="submit" value="login" name="login-form">Login</button>
       </form>
       <div class="member">
-        Not have Account? <a>Sign Up here</a>
+        Not have Account? <a href="/signup">Sign Up here</a>
       </div>
     </div>
   </body>
