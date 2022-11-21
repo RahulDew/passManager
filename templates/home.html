@@ -1,193 +1,35 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link rel="stylesheet" href="{% static 'home.css' %}" />
-    <script defer src="{% static 'script.js' %}"></script>
-  </head>
-  <body>
-    <header>
-      <nav>
-        <div class="logo">&nbsp; Password Manager</div>
-        <ul>
-          <li><a href="">Home</a></li>
+{% extends 'base.html' %}
 
-          {% if request.user.is_anonymous %}
-          <li>
-            <a href="/login">Login</a>
-          </li>
-          <li>
-            <a href="/signup">Signup</a>
-          </li>
-          {% else %}
+{% block title %} Home | Keepar {% endblock %}
 
-          <li>
-            <a
-              href="javascript:;"
-              onclick="document.getElementById('logout-btn').click();"
-              >Logout</a
-            >
-          </li>
-          <form action="." hidden="true" method="POST">
-            {% csrf_token %}
-            <input type="submit" id="logout-btn" name="logout" />
-          </form>
+{% block mainContent %}
 
-          <li>
-            <a href="/notes">notes</a>
-          </li>
-          <li>
-            <a href="/cards">cards</a>
-          </li>
-          <li>
-            <a href="/addpassword">Add</a>
-          </li>
-          <li>
-            <a href="/addnote">addnote</a>
-          </li>
-          <li>
-            <a href="/addcard">addcard</a>
-          </li>
-          {% endif %}
-        </ul>
-      </nav>
-    </header>
+<div class="dash-title">
+  <i class="uil uil-tachometer-fast-alt title-icon"></i>
+  <span class="text">Dashboard</span>
+</div>
 
-    <section class="home">
-      <!-- <div class="start" id="start">
-        <h1>Hey There !</h1>
-        <h1>Let's start with Login</h1>
-        <button onclick="displayModal()">Login</button>
-      </div> -->
+<div class="boxes" id="special-cards">
+  <div class="box special-hover-card">
+    <i class="uil uil-key-skeleton"></i>
+    <span class="text">Passwords</span>
+    <span class="number">50,120</span>
+  </div>
+  <div class="box special-hover-card">
+    <i class="uil uil-notes"></i>
+    <span class="text">Secure Notes</span>
+    <span class="number">20,120</span>
+  </div>
+  <div class="box special-hover-card">
+    <i class="uil uil-credit-card"></i>
+    <span class="text">Card Details</span>
+    <span class="number">10,120</span>
+  </div>
+  <div class="box special-hover-card">
+    <i class="uil uil-apps"></i>
+    <span class="text">Tools</span>
+    <span class="number">10,120</span>
+  </div>
+</div>
 
-      <!-- <div class="main-container" id="main-container"> -->
-
-      <!--Display Messages-->
-      {% if messages %}
-      <div
-        class="messages"
-        style="text-align: center; padding: 10px; background-color: orange"
-      >
-        {% for message in messages %}
-        <p style="font-size: 18px">
-          {% if message.tags == "error" %}
-          <i class="fa-solid fa-exclamation" area-hidden="true"></i>
-          {% else %}
-          <i class="fa-solid fa-check" area-hidden="true"></i>
-          {% endif %} &nbsp;{{message}}
-        </p>
-        {% endfor %}
-      </div>
-      {% endif %}
-      
-        <!-- {% comment %} <div class="view-modal" id="password-modal">
-          <h2>URL or Name</h2>
-          <img
-            width="80"
-            height="80"
-            src="https://cdn.pixabay.com/photo/2016/04/13/14/27/google-chrome-1326908_1280.png"
-            alt=""
-          />
-          <input type="email" name="email" value="Email id" /><i
-            class="fas fa-copy copy"
-            title="copy to clipboard"
-          ></i>
-          <input type="password" name="username" value="Password" /><i
-            class="fas fa-copy copy"
-            title="copy to clipboard"
-          ></i>
-        </div> {% endcomment %} -->
-
-
-        {% comment %} <div class="add-modal" id="add-notes-modal">
-          <form action="." role="form" method="POST">
-            {% csrf_token %}
-            <h2>Add New Notes</h2>
-            <input type="text" name="title" placeholder="Title" />
-            <textarea type="text" name="note" id="" cols="30" rows="10" placeholder="Enter your note"></textarea>
-            <button type="submit" value="save" name="add-notes">Save</button>
-          </form>
-        </div>
-      </div> {% endcomment %}
-
-        
-
-      <!-- </div> -->
-
-      <div
-        class="card-container"
-        style="display: flex; flex-wrap: wrap"
-        id="card-container"
-      >
-        <!--One card-->
-        {% if passwords %} {% for password in passwords %}
-
-        <div
-          class="card"
-          style="
-            flex-direction: column;
-            width: 370px;
-            max-width: 370px;
-            background-color: rgb(167, 176, 176);
-          "
-        >
-          <div class="actions">
-            &nbsp;Actions <i class="fa fa-arrow-down" aria-hidden="true"></i>
-            <a
-              href="javascript:;"
-              onclick="document.getElementById('delete-btn{{password.id}}').click();"
-              class="action-item"
-              >Delete</a
-            >
-            <form hidden="true" action="." method="POST">
-              {% csrf_token %}
-              <input
-                type="text"
-                hidden="true"
-                name="password-id"
-                value="{{password.id}}"
-              />
-              <input
-                type="submit"
-                id="delete-btn{{password.id}}"
-                name="delete"
-              />
-            </form>
-          </div>
-          <img width="50" height="50" src="{{password.logo}}" alt="" />
-          <div class="name">{{password.name}}</div>
-          <input type="email" name="email" value="{{password.email}}" /><i
-            class="fa-regular fa-copy"
-            title="copy to clipboard"
-          ></i>
-          <input
-            type="password"
-            name="username"
-            value="{{password.password}}"
-          /><i class="fa-regular fa-copy" title="copy to clipboard"></i>
-        </div>
-
-        {% endfor %} {% else %}
-
-        <div class="start" id="start">
-          <h1>Hey There !</h1>
-          <h1>Let's start with Login</h1>
-          <button>Login</button>
-        </div>
-
-        {% endif %}
-
-        <!--End-->
-      </div>
-    </section>
-
-    <script
-      src="https://kit.fontawesome.com/669656b653.js"
-      crossorigin="anonymous"
-    ></script>
-  </body>
-</html>
+{% endblock mainContent %}

@@ -1,0 +1,131 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %} {% endblock %}</title>
+    <!--======== CSS ======== -->
+    <link rel="stylesheet" href="{% static 'globalstyle.css' %}" />
+    <link rel="stylesheet" href="{% static 'additems.css' %}" />
+
+    <script
+      defer
+      src="https://code.jquery.com/jquery-3.6.1.min.js"
+      integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
+      crossorigin="anonymous"
+    ></script>
+    <script defer src="{% static 'globalscript.js' %}"></script>
+
+    <!--===== Iconscout CSS ===== -->
+    <link
+      rel="stylesheet"
+      href="https://unicons.iconscout.com/release/v4.0.0/css/line.css"
+    />
+
+    <!--<title>Admin Dashboard Panel</title>-->
+  </head>
+  <body>
+    <nav>
+      <div class="user-profile">
+        <i class="uil uil-user"></i>
+        <div class="username">Ramesh</div>
+      </div>
+
+      <div class="menu-items">
+        <ul class="nav-links">
+          <li>
+            <a href="/">
+              <i class="uil uil-estate"></i>
+              <span class="link-name">Dahsboard</span>
+            </a>
+          </li>
+          <li>
+            <a href="/passwords">
+              <i class="uil uil-key-skeleton"></i>
+              <span class="link-name">Passwords</span>
+            </a>
+          </li>
+          <li>
+            <a href="/notes">
+              <i class="uil uil-notes"></i>
+              <span class="link-name">Secure Notes</span>
+            </a>
+          </li>
+          <li>
+            <a href="/cards">
+              <i class="uil uil-credit-card"></i>
+              <span class="link-name">Card Details</span>
+            </a>
+          </li>
+          <li>
+            <a href="/tools">
+              <i class="uil uil-apps"></i>
+              <span class="link-name">Tools</span>
+            </a>
+          </li>
+        </ul>
+
+        <ul class="logout-mode">
+          <li>
+            <a href="#">
+              <i class="uil uil-question-circle"></i>
+              <span class="link-name">Help</span>
+            </a>
+          </li>
+          <li class="logout-btn">
+            <a
+              href="javascript:;"
+              onclick="document.getElementById('logout-btn').click();"
+            >
+              <i class="uil uil-signout"></i>
+              <span class="link-name">Logout</span>
+            </a>
+          </li>
+          <form action="." hidden="true" method="POST">
+            {% csrf_token %}
+            <input type="submit" hidden id="logout-btn" name="logout" />
+          </form>
+        </ul>
+      </div>
+    </nav>
+
+    <section class="dashboard">
+      <div class="top">
+        <!-- <i class="uil uil-bars sidebar-toggle"></i> -->
+        <div class="logo-name">
+          <div class="logo-image">
+            <!--<img src="images/logo.png" alt="">-->
+          </div>
+          <span class="logo_name">Keepar</span>
+        </div>
+        {% include 'messages.html' %}
+      </div>
+      <!-- <div class="search-box">
+            <i class="uil uil-search"></i>
+            <input type="text" placeholder="Search here...">
+        </div>
+         -->
+      <!--<img src="images/profile.jpg" alt="">-->
+
+      <div class="dash-content">
+        <div class="overview">
+          {% block mainContent %} {% endblock mainContent %}
+        </div>
+      </div>
+    </section>
+
+    <script>
+      setTimeout(function () {
+        if ($(".msg").length > 0) {
+          $(".alert").remove();
+        }
+      }, 2000);
+      $("#close-btn").click(function () {
+        $(".alert").removeClass("show");
+        $(".alert").addClass("hide");
+      });
+    </script>
+  </body>
+</html>

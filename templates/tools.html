@@ -1,0 +1,54 @@
+{% extends 'base.html' %} 
+
+{% block title %} Tools | Keepar {% endblock %}
+
+{% block mainContent %}
+
+<div class="dash-title">
+  <i class="uil uil-apps title-icon"></i>
+  <span class="text">Tools</span>
+</div>
+
+<div class="boxes">
+  <a href="#">
+    <li class="item">
+      <div class="upper">
+        <div class="tool-container">
+          <i class="uil uil-plus-circle main-icon"></i>
+          <div class="tool">
+            <div class="tool-name">Password Generator</div>
+            <p class="tool-desc">
+              Generate a strong and secure <span>password consists of many Characters
+                with maximum 20 digits in one Click and get on your Clipboard</span> 
+            </p>
+          </div>
+        </div>
+        <div class="arrow">
+          <i class="uil uil-angle-right-b toggle-trigger"></i>
+        </div>
+      </div>
+    </li>
+  </a>
+  <a href="#">
+    <li class="item">
+      <div class="upper">
+        <div class="tool-container">
+          <i class="uil uil-check-circle main-icon"></i>
+          <div class="tool">
+            <div class="tool-name">Password Health Checker</div>
+            <p class="tool-desc">
+              Check health of your password <span>to secure/change your password
+                without thinking too much in a single Click and get info about
+                your password</span> 
+            </p>
+          </div>
+        </div>
+        <div class="arrow">
+          <i class="uil uil-angle-right-b toggle-trigger"></i>
+        </div>
+      </div>
+    </li>
+  </a>
+</div>
+
+{% endblock mainContent %}

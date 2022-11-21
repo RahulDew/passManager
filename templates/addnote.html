@@ -1,23 +1,39 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <div class="add-modal" id="add-notes-modal">
-        <form action="/addnote" role="form" method="POST">
-          {% csrf_token %}
-          <h2>Add New Notes</h2>
-          <input type="text" name="topic" placeholder="Title" />
-          <textarea type="text" name="desc" id="" cols="30" rows="10" placeholder="Enter your note"></textarea>
-          <button type="submit" value="save" name="add-notes">Save</button>
-        </form>
-      </div>
-    </div>
+{% extends 'base.html' %}
 
-</body>
-</html>
+{% block title %} Notes | Keepar {% endblock %}
+
+{% block mainContent %}
+
+<div class="title">
+  <div class="title-container">
+    <i class="uil uil-notebooks title-icon"></i>
+    <span class="text">Notes</span>
+  </div>
+  <a href="/notes">
+    <div class="add-button">
+      <div class="add">cancle</div>
+      <i class="uil uil-times add-icon"></i>
+    </div>
+  </a>
+</div>
+
+<div class="add-item-wrapper">
+  <h1>Add New Note</h1>
+  <form action="/addnote" role="form" method="POST">
+    {% csrf_token %}
+    <div class="input-container">
+      <input type="text" name="topic" autocomplete="off" />
+      <span class="lable">Title:</span>
+      <span class="lable-sm">Title</span>
+    </div>
+    <div class="input-container">
+      <textarea type="text" name="desc" cols="30" rows="12" autocomplete="off"></textarea>
+      <span class="lable">Note:</span>
+      <span class="lable-sm">Note</span>
+    </div>
+    <button type="submit" value="save" name="add-notes">Save</button>
+  </form>
+  <div class="member">Write anything that is importent fou you</div>
+</div>
+
+{% endblock mainContent %}

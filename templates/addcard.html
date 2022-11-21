@@ -1,26 +1,54 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <div class="add-modal" id="add-card-modal">
-        <form action="/addcard" role="form" method="POST">
-          {% csrf_token %}
-          <h2>Add New Notes</h2>
-          <input type="text" name="holder_name" placeholder="Holder name" />
-          <input type="text" name="bank_name" placeholder="Bank name" />
-          <input type="number" name="card_number" placeholder="Card number" />
-          <input type="number" name="key" placeholder="Key" />
-          <input type="date" name="expiry_date" placeholder="Expiry date" />
-          <button type="submit" value="save" name="add-card">Save</button>
-        </form>
-      </div>
-    </div>
+{% extends 'base.html' %}
 
-</body>
-</html>
+{% block title %} Cards | Keepar {% endblock %}
+
+{% block mainContent %}
+
+<div class="title">
+  <div class="title-container">
+    <i class="uil uil-credit-card title-icon"></i>
+    <span class="text">Card Details</span>
+  </div>
+  <a href="/cards">
+    <div class="add-button">
+      <div class="add">cancle</div>
+      <i class="uil uil-times add-icon"></i>
+    </div>
+  </a>
+</div>
+
+<div class="add-item-wrapper">
+  <h1>Add New Card-Details</h1>
+  <form action="/addcard" role="form" method="POST">
+    {% csrf_token %}
+    <div class="input-container">
+      <input type="text" name="holder_name" autocomplete="off" maxlength="50" />
+      <span class="lable">Holder Name:</span>
+      <span class="lable-sm">Holder Name</span>
+    </div>
+    <div class="input-container">
+      <input type="text" name="bank_name" autocomplete="off" maxlength="60" />
+      <span class="lable">Bank Name:</span>
+      <span class="lable-sm">Bank Name</span>
+    </div>
+    <div class="input-container">
+      <input type="number" name="card_number" autocomplete="off" maxlength="12" />
+      <span class="lable">Card Number:</span>
+      <span class="lable-sm">Card Number</span>
+    </div>
+    <div class="input-container">
+      <input type="number" name="key" autocomplete="off" maxlength="3" />
+      <span class="lable">Key:</span>
+      <span class="lable-sm">Key</span>
+    </div>
+    <div class="input-container">
+      <input type="date" name="expiry_date" autocomplete="off" />
+      <span class="lable">Expiry Date:</span>
+      <span class="lable-sm">Expiry Date</span>
+    </div>
+    <button type="submit" value="save" name="add-card">Save</button>
+  </form>
+  <div class="member">Make sure using correct credentials!</div>
+</div>
+
+{% endblock mainContent %}

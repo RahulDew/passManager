@@ -20,7 +20,8 @@ class Note(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="topic_content_type")
     topic = models.CharField(max_length=200)
     desc = models.CharField(max_length=4000)
-
+    created_date = models.DateField(auto_now_add=True, auto_now=False)
+    created_time = models.TimeField(auto_now_add=True, auto_now=False)
 
     class Meta:
         ordering = ["-id"]

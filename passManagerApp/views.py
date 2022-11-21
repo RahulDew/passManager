@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.conf import settings
 from django.contrib import messages
 from django.http import HttpResponseRedirect
@@ -44,13 +44,13 @@ def signup(request):
             elif User.objects.filter(username=username).exists():
                 msg = f"{username} already exists!"
                 messages.error(request, msg)
-                return HttpResponseRedirect(request.path)
+                return redirect('/')
 
             # if email exists
             elif User.objects.filter(email=email).exists():
                 msg = f"{email} already exists!"
                 messages.error(request, msg)
-                return HttpResponseRedirect(request.path)
+                return redirect('/')
             
             # create new user
             else:
@@ -60,7 +60,7 @@ def signup(request):
                     Login(request, new_user)
                     msg = f"{username} Thanks for subscribing!"
                     messages.error(request, msg)
-                    return render(request, 'home.html')
+                    return redirect('/')
 
                     # # sending the html email as welcome email
                     # html_content = render_to_string("email_template.html", {'title': 'Welcome Email'})
@@ -127,7 +127,7 @@ def confirmation(request):
                 Login(request, User.objects.get(username=user))
                 msg = f"{request.user} Welcome Again"
                 messages.success(request, msg)
-                return render(request, 'home.html')
+                return redirect('/')
 
     return render(request, 'confirmation.html')
 
@@ -138,6 +138,7 @@ def confirmation(request):
 def addpassword(request):
     if request.method == 'POST':
         if "add-password" in request.POST:
+            name = request.POST.get("name")
             url = request.POST.get("url")
             email = request.POST.get("email")
             password = request.POST.get("password")
@@ -146,20 +147,20 @@ def addpassword(request):
             encrypted_password = fernet.encrypt(password.encode())
             # getting title of the website
             br.open(url)
-            title = br.title()
+            # title = br.title()
             #get the logo of URL
             icon = favicon.get(url)[0].url
             # save data in database
             new_password = Password.objects.create(
                 user = request.user,
-                name = title,
+                name = name,
                 logo = icon,
                 email = encrypted_email.decode(),
                 password = encrypted_password.decode(),
             )
-            msg = f"{title} added successfully"
+            msg = f"{name} added successfully"
             messages.success(request, msg)
-            return render(request, 'home.html')
+            return redirect('/passwords')
     return render(request, 'addpassword.html')
 
 
@@ -177,7 +178,7 @@ def addnote(request):
             new_note = Note.objects.create(user = request.user, topic = topic, desc = encrypted_desc.decode())
             msg = f"{topic} Note added successfully"
             messages.success(request, msg)
-            return render(request, 'home.html')
+            return redirect('/notes')
     
     return render(request, 'addnote.html')
 
@@ -208,18 +209,11 @@ def addcard(request):
                 expiry_date = encrypted_expiry_date.decode(),
             )
             
-            # printing variables
-            print("\n\n\n")
-            print(holder_name)    # # these are just printing the data  
-            print(bank_name)      # # which will going to store in the database
-            print(encrypted_card_number)    
-            print(encrypted_key)
-            print(encrypted_expiry_date)
 
             # printing message to home
             msg = f"{bank_name} Card added successfully"
             messages.success(request, msg)
-            return render(request, 'home.html')
+            return redirect('/cards')
 
     return render(request, 'addcard.html')
 
@@ -238,6 +232,14 @@ def notes(request):
         context = {
             "notes": notes,
         }
+    
+    if request.method == 'POST':
+        if "delete" in request.POST:
+            to_delete = request.POST.get("note-id")
+            msg = f"{Note.objects.get(id = to_delete).topic} deleted successfully"
+            Note.objects.get(id = to_delete).delete()
+            messages.success(request, msg)
+            return redirect('/notes')
 
     return render(request, 'notes.html', context)
 
@@ -259,9 +261,40 @@ def cards(request):
         context = {
             "cards": cards,
         }
+    
+    if request.method == 'POST':
+        if "delete" in request.POST:
+            to_delete = request.POST.get("card-id")
+            msg = f"{Card.objects.get(id = to_delete).bank_name} deleted successfully"
+            Card.objects.get(id = to_delete).delete()
+            messages.success(request, msg)
+            return redirect('/cards')
 
     return render(request, 'cards.html', context)
 
+
+
+
+def passwords(request):
+    context = {}
+    if request.user.is_authenticated:
+        passwords = Password.objects.all().filter(user=request.user)
+        for password in passwords:
+            password.email = fernet.decrypt(password.email.encode()).decode()
+            password.password = fernet.decrypt(password.password.encode()).decode()
+        context = {
+            "passwords":passwords,
+        }
+    
+    if request.method == 'POST':
+        if "delete" in request.POST:
+            to_delete = request.POST.get("password-id")
+            msg = f"{Password.objects.get(id = to_delete).name} deleted successfully"
+            Password.objects.get(id = to_delete).delete()
+            messages.success(request, msg)
+            return redirect('/passwords')
+
+    return render(request, 'passwords.html', context)
 
 
 # home view
@@ -274,21 +307,16 @@ def home(request):
             msg = f"You're logged out"
             messages.success(request, msg)
             return HttpResponseRedirect(request.path)
-        elif "delete" in request.POST:
-            to_delete = request.POST.get("password-id")
-            msg = f"{Password.objects.get(id = to_delete).name} deleted successfully"
-            Password.objects.get(id = to_delete).delete()
-            messages.success(request, msg)
-            return HttpResponseRedirect(request.path)
-        
-    context = {}
-    if request.user.is_authenticated:
-        passwords = Password.objects.all().filter(user=request.user)
-        for password in passwords:
-            password.email = fernet.decrypt(password.email.encode()).decode()
-            password.password = fernet.decrypt(password.password.encode()).decode()
-        context = {
-            "passwords":passwords,
-        }
+        # elif "delete" in request.POST:
+        #     to_delete = request.POST.get("password-id")
+        #     msg = f"{Password.objects.get(id = to_delete).name} deleted successfully"
+        #     Password.objects.get(id = to_delete).delete()
+        #     messages.success(request, msg)
+        #     return HttpResponseRedirect(request.path)
 
-    return render(request, 'home.html', context)
+    return render(request, 'home.html')
+
+
+def tools(request):
+
+    return render(request, 'tools.html')

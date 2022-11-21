@@ -1,0 +1,13 @@
+{% if messages %} {% for message in messages %}
+<div class="alert show" id="alert">
+  {% if message.tags == "error" %}
+  <span class="uil uil-exclamation-circle"></span>
+  {% else %}
+  <span class="uil uil-check-circle"></span>
+  {% endif %}
+  <span class="msg">{{message}}</span>
+  <div class="close-btn" id="close-btn">
+    <i class="uil uil-times"></i>
+  </div>
+</div>
+{% endfor %} {% endif %}
