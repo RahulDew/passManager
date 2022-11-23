@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %} Add Note | Abstractor {% endblock %}
+{% block title %} Update Note | Abstractor {% endblock %}
 
 {% block mainContent %}
 
@@ -18,20 +18,21 @@
 </div>
 
 <div class="add-item-wrapper">
-  <h1>Add New Note</h1>
-  <form action="/addnote" role="form" method="POST">
+  <h1>Update your Note</h1>
+  <h1>{{note}}</h1>
+  <form action="/updatenote/{{note.id}}" role="form" method="POST">
     {% csrf_token %}
     <div class="input-container">
-      <input type="text" name="topic" autocomplete="off" />
+      <input type="text" name="topic" value={{note.topic}} />
       <span class="lable">Title:</span>
       <span class="lable-sm">Title</span>
     </div>
     <div class="input-container">
-      <textarea type="text" name="desc" cols="30" rows="12" autocomplete="off"></textarea>
+      <textarea type="text" name="desc" cols="30" rows="12" >{{note.desc}}</textarea>
       <span class="lable">Note:</span>
       <span class="lable-sm">Note</span>
     </div>
-    <button type="submit" value="save" name="add-notes">Save</button>
+    <button type="submit" value="update" name="update-note">Update</button>
   </form>
   <div class="member">Write anything that is importent fou you</div>
 </div>

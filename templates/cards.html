@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %} Cards | Keepar {% endblock %}
+{% block title %} Cards | Abstractor {% endblock %}
 
 {% block mainContent %}
 
@@ -78,7 +78,9 @@
             name="delete"
           ></button>
         </form>
-        <button class="edit btn">Edit</button>
+        <a href="{% url 'updatecard' card.id %}">
+          <button class="edit btn">Edit</button>
+        </a>
       </div>
     </div>
   </li>

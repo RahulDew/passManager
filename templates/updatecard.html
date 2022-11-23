@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %} Add Card Details | Abstractor {% endblock %}
+{% block title %} Update Card Details | Abstractor {% endblock %}
 
 {% block mainContent %}
 
@@ -19,34 +19,35 @@
 
 <div class="add-item-wrapper">
   <h1>Add New Card-Details</h1>
-  <form action="/addcard" role="form" method="POST">
+  <h1>{{card}}</h1>
+  <form action="/updatecard/{{card.id}}" role="form" method="POST">
     {% csrf_token %}
     <div class="input-container">
-      <input type="text" name="holder_name" autocomplete="off" maxlength="50" />
+      <input type="text" name="holder_name" autocomplete="off" maxlength="50" value={{card.holder_name}} />
       <span class="lable">Holder Name:</span>
       <span class="lable-sm">Holder Name</span>
     </div>
     <div class="input-container">
-      <input type="text" name="bank_name" autocomplete="off" maxlength="60" />
+      <input type="text" name="bank_name" autocomplete="off" maxlength="60" value={{card.bank_name}} />
       <span class="lable">Bank Name:</span>
       <span class="lable-sm">Bank Name</span>
     </div>
     <div class="input-container">
-      <input type="number" name="card_number" autocomplete="off" maxlength="12" />
+      <input type="number" name="card_number" autocomplete="off" maxlength="12" value={{card.card_number}} />
       <span class="lable">Card Number:</span>
       <span class="lable-sm">Card Number</span>
     </div>
     <div class="input-container">
-      <input type="number" name="key" autocomplete="off" maxlength="3" />
+      <input type="number" name="key" autocomplete="off" maxlength="3" value={{card.key}} />
       <span class="lable">Key:</span>
       <span class="lable-sm">Key</span>
     </div>
     <div class="input-container">
-      <input type="date" name="expiry_date" autocomplete="off" />
+      <input type="date" name="expiry_date" autocomplete="off" value={{card.expiry_date}} />
       <span class="lable">Expiry Date:</span>
       <span class="lable-sm">Expiry Date</span>
     </div>
-    <button type="submit" value="save" name="add-card">Save</button>
+    <button type="submit" value="update" name="update-card">Update</button>
   </form>
   <div class="member">Make sure using correct credentials!</div>
 </div>

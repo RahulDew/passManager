@@ -572,6 +572,12 @@ nav.close ~ .dashboard .top {
 .upper-left{
   font-size: 1.3rem;
 }
+.upper-center{
+  /* float: right; */
+  text-align: right;
+  flex-grow: 1;
+  margin-right: 3rem;
+}
 .upper-center span{
   color: rgba(221, 221, 221, 0.45);
   font-size: 0.9rem;

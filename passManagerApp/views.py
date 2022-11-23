@@ -142,18 +142,23 @@ def addpassword(request):
             url = request.POST.get("url")
             email = request.POST.get("email")
             password = request.POST.get("password")
+            #get the logo of URL
+            try:
+                icon = favicon.get(url)[0].url
+            except:
+                icon = "https://cdn-icons-png.flaticon.com/128/1006/1006771.png"
             #encrypt data
+            encrypted_url = fernet.encrypt(url.encode())
             encrypted_email = fernet.encrypt(email.encode())
             encrypted_password = fernet.encrypt(password.encode())
             # getting title of the website
-            br.open(url)
+            # br.open(url)
             # title = br.title()
-            #get the logo of URL
-            icon = favicon.get(url)[0].url
             # save data in database
             new_password = Password.objects.create(
                 user = request.user,
                 name = name,
+                url = encrypted_url.decode(),
                 logo = icon,
                 email = encrypted_email.decode(),
                 password = encrypted_password.decode(),
@@ -162,6 +167,34 @@ def addpassword(request):
             messages.success(request, msg)
             return redirect('/passwords')
     return render(request, 'addpassword.html')
+
+def updatepassword(request, password_id):
+    password = Password.objects.get(id = password_id)
+    password.url = fernet.decrypt(password.url.encode()).decode()
+    password.email = fernet.decrypt(password.email.encode()).decode()
+    password.password = fernet.decrypt(password.password.encode()).decode()
+
+    if request.method == 'POST':
+        if "update-password" in request.POST:
+            password.name = request.POST.get("name")
+            updated_url = request.POST.get("url")
+            try:
+                password.logo = favicon.get(password.url)[0].url
+            except:
+                password.logo = "https://cdn-icons-png.flaticon.com/128/1006/1006771.png"
+            updated_email = request.POST.get("email")
+            updated_password = request.POST.get("password")
+            password.url = fernet.encrypt(updated_url.encode()).decode()
+            password.email = fernet.encrypt(updated_email.encode()).decode()
+            password.password = fernet.encrypt(updated_password.encode()).decode()
+            password.save()
+            
+            msg = f"Your Password: {password.name} - Updated successfully"
+            messages.success(request, msg)
+            return redirect('/passwords')
+    return render(request, 'updatepassword.html', { "password" : password })
+
+
 
 
 # addnote view
@@ -173,14 +206,34 @@ def addnote(request):
             topic = request.POST.get("topic")
             desc = request.POST.get("desc")
             #encrypt data
-            encrypted_desc = fernet.encrypt(desc.encode())
+            encrypted_desc = fernet.encrypt(desc.encode()).decode()
             # save data in database
-            new_note = Note.objects.create(user = request.user, topic = topic, desc = encrypted_desc.decode())
-            msg = f"{topic} Note added successfully"
+            new_note = Note.objects.create(user = request.user, topic = topic, desc = encrypted_desc)
+            msg = f"Your Note: {topic} - added successfully"
             messages.success(request, msg)
             return redirect('/notes')
     
     return render(request, 'addnote.html')
+
+
+def updatenote(request, note_id):
+    note = Note.objects.get(id = note_id)
+    note.topic = note.topic
+    note.desc = fernet.decrypt(note.desc.encode()).decode()
+    if request.method == 'POST':
+        if "update-note" in request.POST:
+            topic = request.POST.get("topic")
+            desc = request.POST.get("desc")
+            updated_desc = fernet.encrypt(desc.encode()).decode()
+            note.topic = topic
+            # note.desc = desc
+            note.desc = updated_desc
+            note.save()
+            msg = f"Your Note: {topic} - Updated successfully"
+            messages.success(request, msg)
+            return redirect('/notes')
+    return render(request, 'updatenote.html', { "note" : note })
+
 
 
 #addcard view
@@ -208,14 +261,42 @@ def addcard(request):
                 key = encrypted_key.decode(),
                 expiry_date = encrypted_expiry_date.decode(),
             )
-            
-
             # printing message to home
             msg = f"{bank_name} Card added successfully"
             messages.success(request, msg)
             return redirect('/cards')
 
     return render(request, 'addcard.html')
+
+
+def updatecard(request, card_id):
+    card = Card.objects.get(id = card_id)
+    card.card_number = fernet.decrypt(card.card_number.encode()).decode()
+    card.key = fernet.decrypt(card.key.encode()).decode()
+    card.expiry_date = fernet.decrypt(card.expiry_date.encode()).decode()
+
+    if request.method == 'POST':
+        if "update-card" in request.POST:
+            # getting data from input
+            holder_name = request.POST.get("holder_name")
+            bank_name = request.POST.get("bank_name")
+            updated_card_number = request.POST.get("card_number")
+            updated_key = request.POST.get("key")
+            updated_expiry_date = request.POST.get("expiry_date")
+            #setting and encrypting data
+            card.holder_name = holder_name
+            card.bank_name = bank_name
+            card.card_number = fernet.encrypt(updated_card_number.encode()).decode()
+            card.key = fernet.encrypt(updated_key.encode()).decode()
+            card.expiry_date = fernet.encrypt(updated_expiry_date.encode()).decode()
+            card.save()
+
+            msg = f"Your Card Detail: {card.bank_name} Card - Updated successfully"
+            messages.success(request, msg)
+            return redirect('/cards')
+
+    return render(request, 'updatecard.html', { "card" : card })
+
 
 
 
@@ -228,7 +309,9 @@ def notes(request):
         notes = Note.objects.all().filter(user=request.user)
         for note in notes:
             note.topic = note.topic
+            # note.desc = note.desc
             note.desc = fernet.decrypt(note.desc.encode()).decode()
+
         context = {
             "notes": notes,
         }
@@ -236,7 +319,7 @@ def notes(request):
     if request.method == 'POST':
         if "delete" in request.POST:
             to_delete = request.POST.get("note-id")
-            msg = f"{Note.objects.get(id = to_delete).topic} deleted successfully"
+            msg = f"Your Note: {Note.objects.get(id = to_delete).topic} - Deleted successfully"
             Note.objects.get(id = to_delete).delete()
             messages.success(request, msg)
             return redirect('/notes')
@@ -280,6 +363,7 @@ def passwords(request):
     if request.user.is_authenticated:
         passwords = Password.objects.all().filter(user=request.user)
         for password in passwords:
+            password.url = fernet.decrypt(password.url.encode()).decode()
             password.email = fernet.decrypt(password.email.encode()).decode()
             password.password = fernet.decrypt(password.password.encode()).decode()
         context = {
@@ -307,12 +391,6 @@ def home(request):
             msg = f"You're logged out"
             messages.success(request, msg)
             return HttpResponseRedirect(request.path)
-        # elif "delete" in request.POST:
-        #     to_delete = request.POST.get("password-id")
-        #     msg = f"{Password.objects.get(id = to_delete).name} deleted successfully"
-        #     Password.objects.get(id = to_delete).delete()
-        #     messages.success(request, msg)
-        #     return HttpResponseRedirect(request.path)
 
     return render(request, 'home.html')
 
@@ -320,3 +398,4 @@ def home(request):
 def tools(request):
 
     return render(request, 'tools.html')
+
