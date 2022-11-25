@@ -10,6 +10,7 @@ from cryptography.fernet import Fernet
 from mechanize import Browser
 import favicon
 from .models import Password, Note, Card
+from .passpwned import checkPassPwned
 from django.contrib.auth.decorators import login_required
 
 # html email required stuff
@@ -20,7 +21,6 @@ from django.contrib.auth.decorators import login_required
 br = Browser()
 br.set_handle_robots(False)
 fernet = Fernet(settings.KEY.encode())
-
 
 
 # Create your views here.
@@ -58,7 +58,7 @@ def signup(request):
                 new_user = authenticate(request, username=username, password=confirmPassword)
                 if new_user is not None:
                     Login(request, new_user)
-                    msg = f"{username} Thanks for subscribing!"
+                    msg = f"{username} Thanks for Subscribing!"
                     messages.error(request, msg)
                     return redirect('/')
 
@@ -125,7 +125,7 @@ def confirmation(request):
                 return render(request, 'home.html')
             else:
                 Login(request, User.objects.get(username=user))
-                msg = f"{request.user} Welcome Again"
+                msg = f"Welcome Again {request.user}!"
                 messages.success(request, msg)
                 return redirect('/')
 
@@ -133,7 +133,7 @@ def confirmation(request):
 
 
 
-# addpassword view
+# addpassword view and updatepassword view
 
 def addpassword(request):
     if request.method == 'POST':
@@ -163,7 +163,7 @@ def addpassword(request):
                 email = encrypted_email.decode(),
                 password = encrypted_password.decode(),
             )
-            msg = f"{name} added successfully"
+            msg = f"Your Password: {name} - Added Successfully"
             messages.success(request, msg)
             return redirect('/passwords')
     return render(request, 'addpassword.html')
@@ -197,7 +197,7 @@ def updatepassword(request, password_id):
 
 
 
-# addnote view
+# addnote view and updatenote view
 
 def addnote(request):
     if request.method == 'POST':
@@ -209,7 +209,7 @@ def addnote(request):
             encrypted_desc = fernet.encrypt(desc.encode()).decode()
             # save data in database
             new_note = Note.objects.create(user = request.user, topic = topic, desc = encrypted_desc)
-            msg = f"Your Note: {topic} - added successfully"
+            msg = f"Your Note: {topic} - Added Successfully"
             messages.success(request, msg)
             return redirect('/notes')
     
@@ -236,7 +236,7 @@ def updatenote(request, note_id):
 
 
 
-#addcard view
+#addcard view and updatecard view
 
 def addcard(request):
     if request.method == 'POST':
@@ -262,7 +262,7 @@ def addcard(request):
                 expiry_date = encrypted_expiry_date.decode(),
             )
             # printing message to home
-            msg = f"{bank_name} Card added successfully"
+            msg = f"Your Card Details: {bank_name} - Added Successfully"
             messages.success(request, msg)
             return redirect('/cards')
 
@@ -348,7 +348,7 @@ def cards(request):
     if request.method == 'POST':
         if "delete" in request.POST:
             to_delete = request.POST.get("card-id")
-            msg = f"{Card.objects.get(id = to_delete).bank_name} deleted successfully"
+            msg = f"Your Card Details: {Card.objects.get(id = to_delete).bank_name} - Deleted Successfully"
             Card.objects.get(id = to_delete).delete()
             messages.success(request, msg)
             return redirect('/cards')
@@ -357,6 +357,7 @@ def cards(request):
 
 
 
+# home view
 
 def passwords(request):
     context = {}
@@ -373,7 +374,7 @@ def passwords(request):
     if request.method == 'POST':
         if "delete" in request.POST:
             to_delete = request.POST.get("password-id")
-            msg = f"{Password.objects.get(id = to_delete).name} deleted successfully"
+            msg = f"Your Password: {Password.objects.get(id = to_delete).name} - Deleted Successfully"
             Password.objects.get(id = to_delete).delete()
             messages.success(request, msg)
             return redirect('/passwords')
@@ -384,16 +385,41 @@ def passwords(request):
 # home view
 
 def home(request):
+    context = {}
+    if request.user.is_authenticated:
+        passwords_count = Password.objects.all().filter(user=request.user).count()
+        notes_count = Note.objects.all().filter(user=request.user).count()
+        cards_count = Card.objects.all().filter(user=request.user).count()
+        context = { 
+            "passwords_count" : passwords_count, 
+            "notes_count" : notes_count, 
+            "cards_count" : cards_count, 
+            }
 
+        if request.method == 'POST':
+            if "logout" in request.POST:
+                logout(request)
+                msg = f"You're Logged Out"
+                messages.success(request, msg)
+                return HttpResponseRedirect(request.path)
+
+    return render(request, 'home.html', context)
+
+
+# pwnedPassCheck view
+
+def pwnedPassCheck(request):
+    context = {}
     if request.method == 'POST':
-        if "logout" in request.POST:
-            logout(request)
-            msg = f"You're logged out"
-            messages.success(request, msg)
-            return HttpResponseRedirect(request.path)
+        if "check-pass" in request.POST:
+            password  = request.POST.get("password")
+            result = checkPassPwned(password)
+            context = {
+                    "result":result,
+                }
+    return render(request, 'pwnedPassCheck.html', context)
 
-    return render(request, 'home.html')
-
+# tools view
 
 def tools(request):
 

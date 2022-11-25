@@ -1,6 +1,6 @@
 {% extends 'base.html' %} 
 
-{% block title %} Tools | Keepar {% endblock %}
+{% block title %} Tools | Keepar {% endblock %} 
 
 {% block mainContent %}
 
@@ -10,16 +10,19 @@
 </div>
 
 <div class="boxes">
-  <a href="#">
     <li class="item">
+      <a href="#">
       <div class="upper">
         <div class="tool-container">
           <i class="uil uil-plus-circle main-icon"></i>
           <div class="tool">
             <div class="tool-name">Password Generator</div>
             <p class="tool-desc">
-              Generate a strong and secure <span>password consists of many Characters
-                with maximum 20 digits in one Click and get on your Clipboard</span> 
+              Generate a strong and secure
+              <span
+                >password consists of many Characters with maximum 20 digits in
+                one Click and get on your Clipboard</span
+              >
             </p>
           </div>
         </div>
@@ -27,9 +30,30 @@
           <i class="uil uil-angle-right-b toggle-trigger"></i>
         </div>
       </div>
+      </a>
     </li>
-  </a>
-  <a href="#">
+    <li class="item">
+      <a href="/pwnedPassCheck">
+      <div class="upper">
+        <div class="tool-container">
+          <i class="uil uil-plus-circle main-icon"></i>
+          <div class="tool">
+            <div class="tool-name">Check Password Data Breach</div>
+            <p class="tool-desc">
+              Check health of your password
+              <span
+                >to secure/change your password without thinking too much in a
+                single Click and get info about your password</span
+              >
+            </p>
+          </div>
+        </div>
+        <div class="arrow">
+          <i class="uil uil-angle-right-b toggle-trigger"></i>
+        </div>
+      </div>
+      </a>
+    </li>
     <li class="item">
       <div class="upper">
         <div class="tool-container">
@@ -37,9 +61,11 @@
           <div class="tool">
             <div class="tool-name">Password Health Checker</div>
             <p class="tool-desc">
-              Check health of your password <span>to secure/change your password
-                without thinking too much in a single Click and get info about
-                your password</span> 
+              Check health of your password
+              <span
+                >to secure/change your password without thinking too much in a
+                single Click and get info about your password</span
+              >
             </p>
           </div>
         </div>
@@ -48,7 +74,34 @@
         </div>
       </div>
     </li>
-  </a>
+    {% comment %} <li class="item">
+      <div class="upper">
+        <div class="tool-container">
+          <i class="uil uil-check-circle main-icon"></i>
+          <div class="tool">
+            <div class="tool-name">Check Pass Data Breach</div>
+            <p class="tool-desc">
+              Check health of your password
+              <span
+                >to secure/change your password without thinking too much in a
+                single Click and get info about your password</span
+              >
+            </p>
+          </div>
+        </div>
+        <div class="arrow">
+          <i class="uil uil-angle-right-b toggle-trigger"></i>
+        </div>
+      </div>
+      <form action="/tools" role="form" method="POST">
+        {% csrf_token %}
+        <div class="input-container">
+          <input type="text" name="password" autocomplete="off" />
+        </div>
+        <button type="submit" value="save" name="check-pass">Check</button>
+      </form>
+      </div>
+    </li> {% endcomment %}
 </div>
 
 {% endblock mainContent %}

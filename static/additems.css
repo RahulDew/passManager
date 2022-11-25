@@ -76,7 +76,7 @@ textarea {
 
 .add-item-wrapper input:focus,
 .add-item-wrapper textarea:focus {
-  border-bottom-color: rgba(68, 210, 149, 0.756);
+  border-bottom-color: rgb(67, 208, 156);
 }
 
 .add-item-wrapper input:focus ~ .lable,
@@ -86,7 +86,7 @@ textarea {
 .add-item-wrapper input:focus ~ .lable-sm,
 .add-item-wrapper textarea:focus ~ .lable-sm {
   opacity: 1;
-  color: rgba(68, 210, 149, 0.756);
+  color: rgb(67, 208, 156);
 }
 .add-item-wrapper button {
   background-color: rgba(240, 248, 255, 0.139);
@@ -100,7 +100,7 @@ textarea {
   transition: 0.6s ease-in-out;
 }
 .add-item-wrapper button:hover {
-  background-color: rgba(36, 188, 122, 0.756);
+  background-color: rgb(67, 208, 156);
 }
 
 @media screen and (max-width: 900px) {
@@ -132,16 +132,4 @@ textarea {
   .add-item-wrapper textarea {
     width: 60vw;
   }
-}
-
-/* .member {
-  font-size: 0.8rem;
-  margin-top: 1.2rem;
-  color: aliceblue;
-}
-.member a {
-  color: rgb(28, 205, 140);
-}
-.member p {
-  margin: 5px auto;
 }

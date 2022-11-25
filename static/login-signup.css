@@ -1,3 +1,13 @@
+/* for setting autofill color to green */
+
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px #0d2145 inset !important;
+  -webkit-text-fill-color: rgb(67, 208, 156) !important;
+  border: 1px solid rgb(67, 208, 156);
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -5,40 +15,35 @@
   font-family: sans-serif;
 }
 body {
-  /* display: flex;
-    flex-direction: column;
-    align-items: center; */
-  text-align: center;
   background: linear-gradient(90deg, rgb(0, 2, 35) 0%, rgb(0, 32, 66) 100%);
-  /* 
-  background: -moz-linear-gradient(
-    90deg,
-    hsla(236, 100%, 8%, 1) 0%,
-    hsla(211, 100%, 28%, 1) 100%
-  );
-
-  background: -webkit-linear-gradient(
-    90deg,
-    hsla(236, 100%, 8%, 1) 0%,
-    hsla(211, 100%, 28%, 1) 100%
-  ); */
+  min-height: 100vh;
+  color: aliceblue;
 }
-.wrapper {
-  width: 330px;
+.wrapper-container {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+.wrapper-container .wrapper {
+  width: 350px;
   padding: 2rem 1rem;
   margin: auto;
   background-color: rgba(240, 248, 255, 0.137);
   border-radius: 10px;
   text-align: center;
-  box-shadow: 0 20px 35px rgba(19, 19, 19, 0.119);
-  position: relative;
+  position: absolute;
   top: 50%;
-  transform: translateY(50%);
+  transform: translateY(-50%);
+}
+.add-wrapper {
+  width: 430px;
 }
 h1 {
-  font-size: 2rem;
+  font-size: 2.2rem;
   color: aliceblue;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
 }
 form input {
   width: 92%;
@@ -50,9 +55,10 @@ form input {
   background-color: rgba(7, 24, 62, 0.902);
   color: rgb(255, 255, 255);
   transition: all 0.4s ease-in-out;
+  font-size: 1rem;
 }
 button {
-  font-size: 1rem;
+  font-size: 1.1rem;
   margin-top: 1rem;
   padding: 10px 0;
   outline: none;
@@ -60,61 +66,68 @@ button {
   width: 90%;
   color: aliceblue;
   cursor: pointer;
-  background-color: rgb(20, 151, 103);
+  background-color: rgb(67, 208, 156);
   border-radius: 50px;
   transition: all 0.4s ease-in-out;
 }
 button:hover {
-  background: rgb(26, 103, 75);
+  background: rgb(49, 149, 112);
 }
 input:focus {
-  border: 2px solid rgb(20, 151, 103);
+  border: 2px solid rgb(67, 208, 156);
 }
 .member {
-  font-size: 0.8rem;
-  margin-top: 1.2rem;
+  font-size: 1rem;
+  margin-top: 2rem;
   color: aliceblue;
 }
 .member a {
-  color: rgb(28, 205, 140);
+  color: rgb(67, 208, 156);
 }
 .member p {
-  margin: 5px auto;
+  margin: 5rem;
 }
-
-
-
- /* for setting placeholder color to white */
+/* 
+@media (max-width: 450) {
+  .add-wrapper {
+    width: 300px;
+  }
+} */
+@media (max-width: 400px) {
+  .wrapper-container .wrapper {
+    width: 300px;
+  }
+  h1 {
+    font-size: 1.8rem;
+  }
+}
+@media (max-width: 350px) {
+  .wrapper-container .wrapper {
+    width: 260px;
+    padding: 2rem 0rem;
+  }
+  form input {
+    width: 85%;
+  }
+}
 
 input::-webkit-input-placeholder {
-  color: rgba(240, 248, 255, 0.746);
+  color: rgba(240, 248, 255, 0.797);
 }
 input:-moz-placeholder {
-  color: rgba(240, 248, 255, 0.746);
-  /* opacity: 1; */
+  color: rgba(240, 248, 255, 0.797);
+  opacity: 1;
 }
 input::-moz-placeholder {
-  color: rgba(240, 248, 255, 0.746);
-  /* opacity: 1; */
+  color: rgba(240, 248, 255, 0.797);
+  opacity: 1;
 }
 input:-ms-input-placeholder {
-  color: rgba(240, 248, 255, 0.746);
+  color: rgba(240, 248, 255, 0.797);
 }
 input::-ms-input-placeholder {
-  color: rgba(240, 248, 255, 0.746);
+  color: rgba(240, 248, 255, 0.797);
 }
 input::placeholder {
-  color: rgba(240, 248, 255, 0.746);
+  color: rgba(240, 248, 255, 0.797);
 }
-
-
-
- /* for setting autofill color to green */
-
-/* input:-webkit-autofill,
-textarea:-webkit-autofill,
-select:-webkit-autofill {
-  -webkit-box-shadow: 0 0 0 1000px #0d2145 inset !important;
-  -webkit-text-fill-color: rgb(59, 224, 161) !important;
-  border: 1px solid rgb(42, 202, 141);
-} */

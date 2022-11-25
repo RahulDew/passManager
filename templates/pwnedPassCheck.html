@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %} Pwned Password Check | Abstractor {% endblock %}
+
+{% block mainContent %}
+
+<div class="title">
+  <div class="title-container">
+    <i class="uil uil-shield title-icon"></i>
+    <span class="text">Pwned pass Check</span>
+  </div>
+</div>
+
+<div class="boxes">
+  <li class="item">
+    <div class="tool-container">
+      <i class="uil uil-shield main-icon"></i>
+      <div class="tool">
+        <div class="tool-name">Password Data Bridge Check</div>
+        <p class="tool-desc">
+          <span>
+          Check your password in data bridge and warn you if your
+          password vernable
+        </span>
+        </p>
+      </div>
+    </div>
+    <div class="tool-content">
+      <form action="/pwnedPassCheck" role="form" method="POST">
+        {% csrf_token %}
+        <div class="input-container">
+          <p>Enter Your Password:</p>
+          <input type="text" name="password" />
+          <button type="submit" value="Check" name="check-pass">Check</button>
+        </div>
+      </form>
+      <div class="results">
+        <h2>Result:</h2>
+        {% if result %} 
+        <i class="uil uil-shield-slash result-icon warning"></i>
+        <p>
+          <span class="warning">Compromised!</span>Your Password has Compromised <span class="warning">{{ result }}</span> times ! your
+          Password is Not Safe safe Keep upating your password
+        </p>
+        {% else %}
+        <i class="uil uil-shield-check result-icon ok"></i>
+        <p>
+          <span class="ok">Safe!</span>No data Bridge found in your Password ! your
+          Password is safe Keep upating your password
+        </p>
+        {% endif %}
+      </div>
+      <!-- <div class="tips">
+        <h2>Best Practices:</h2>
+        <p>Reguarly update your passwords and set a new password !</p>
+        <p>Reguarly update your passwords and set a new password !</p>
+        <p>Reguarly update your passwords and set a new password !</p>
+      </div> -->
+    </div>
+  </li>
+</div>
+
+{% endblock mainContent %}

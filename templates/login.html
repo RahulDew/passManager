@@ -6,23 +6,22 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login</title>
-    {% comment %}
-    <link rel="stylesheet" href="./login-signup.css" />
-    {% endcomment %}
+    <title>Login | Abstractor</title>
     <link rel="stylesheet" href="{% static 'login-signup.css' %}" />
   </head>
   <body>
-    <div class="wrapper">
-      <h1>Login</h1>
-      <form action="/login" role="form" method="POST">
-        {% csrf_token %}
-        <input type="text" name="username" placeholder="Username" />
-        <input type="password" name="password" placeholder="Password" />
-        <button type="submit" value="login" name="login-form">Login</button>
-      </form>
-      <div class="member">
-        Not have Account? <a href="/signup">Sign Up here</a>
+    <div class="wrapper-container">
+      <div class="wrapper">
+        <h1>Login</h1>
+        <form action="/login" role="form" method="POST">
+          {% csrf_token %}
+          <input type="text" name="username" placeholder="Username" />
+          <input type="password" name="password" placeholder="Password" />
+          <button type="submit" value="login" name="login-form">Login</button>
+        </form>
+        <div class="member">
+          Not have Account? <a href="/signup">Sign Up here</a>
+        </div>
       </div>
     </div>
   </body>
