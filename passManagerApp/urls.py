@@ -1,5 +1,13 @@
+from django.contrib import admin
 from django.urls import path
 from .views import *
+
+
+# Django admin header customization
+admin.site.site_header = "Welcome to ABSTRACTOR"
+admin.site.site_title = "Abstractor Backend Dashboard"
+admin.site.index_title = "ABSTRACTOR Administration"
+
 urlpatterns = [
     path("", home, name="home"),
     path("signup", signup, name="signup"),
@@ -15,5 +23,6 @@ urlpatterns = [
     path("updatenote/<note_id>", updatenote, name="updatenote"),
     path("updatecard/<card_id>", updatecard, name="updatecard"),
     path("tools", tools, name="tools"),
+    path("passgenerator", passgenerator, name="passgenerator"),
     path("pwnedPassCheck", pwnedPassCheck, name="pwnedPassCheck"),
 ]

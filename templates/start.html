@@ -6,10 +6,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Abstractor</title>
+    <link rel="stylesheet" href="{% static 'globalScript.css' %}" />
     <link rel="stylesheet" href="{% static 'start.css' %}" />
   </head>
   <body>
+    
     <div class="start-container">
+      {% include 'messages.html' %}
       <div class="container">
         <div class="top">
           <div class="logo-text">
@@ -41,5 +44,16 @@
         </div>
       </div>
     </div>
+    <script>
+      setTimeout(function () {
+        if ($(".msg").length > 0) {
+          $(".alert").remove();
+        }
+      }, 2000);
+      $("#close-btn").click(function () {
+        $(".alert").removeClass("show");
+        $(".alert").addClass("hide");
+      });
+    </script>
   </body>
 </html>

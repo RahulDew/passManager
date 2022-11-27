@@ -13,10 +13,7 @@ from .models import Password, Note, Card
 from .passpwned import checkPassPwned
 from django.contrib.auth.decorators import login_required
 
-# html email required stuff
-# from django.core.mail import EmailMultiAlternatives # Main thingthis will help to send html email
-# from django.template.loader import render_to_string # helps to render stuff dynamically
-# from django.utils.html import strip_tags # so that we send content
+
 
 br = Browser()
 br.set_handle_robots(False)
@@ -36,21 +33,21 @@ def signup(request):
             confirmPassword = request.POST.get("confirmPassword")
             # if password aren't identical
             if password != confirmPassword:
-                msg = "please make sure you're using same password!"
+                msg = "Password is not same!"
                 messages.error(request, msg)
-                return HttpResponseRedirect(request.path)
+                return redirect('/signup')
             
             # if user exists
             elif User.objects.filter(username=username).exists():
                 msg = f"{username} already exists!"
                 messages.error(request, msg)
-                return redirect('/')
+                return redirect('/signup')
 
             # if email exists
             elif User.objects.filter(email=email).exists():
                 msg = f"{email} already exists!"
                 messages.error(request, msg)
-                return redirect('/')
+                return redirect('/signup')
             
             # create new user
             else:
@@ -61,20 +58,6 @@ def signup(request):
                     msg = f"{username} Thanks for Subscribing!"
                     messages.error(request, msg)
                     return redirect('/')
-
-                    # # sending the html email as welcome email
-                    # html_content = render_to_string("email_template.html", {'title': 'Welcome Email'})
-                    # text_content = strip_tags(html_content)
-
-                    # welcome_email = EmailMultiAlternatives(
-                    #     "Welcome_testing",
-                    #     text_content,
-                    #     settings.EMAIL_HOST_USER,
-                    #     [email]
-                    # )
-
-                    # welcome_email.attatchaltranative(html_content, "text/html")
-                    # welcome_email.send()
 
     return render(request, 'signup.html')
     
@@ -92,13 +75,13 @@ def login(request):
             if new_login is None:
                 msg = f"Login failed! Make sure you're using the right account"
                 messages.error(request, msg)
-                return HttpResponseRedirect(request.path)
+                return redirect('/login')
             else:
                 code = str(random.randint(100000, 999999))
                 global global_code
                 global_code = code
                 send_mail(
-                    "Django Password Manager: confirm email",
+                    "ABSTRACTOR - The Password Manager: confirmation email",
                     f"Your verification code is {code}.",
                     settings.EMAIL_HOST_USER,
                     [new_login.email],
@@ -420,6 +403,10 @@ def pwnedPassCheck(request):
     return render(request, 'pwnedPassCheck.html', context)
 
 # tools view
+
+def passgenerator(request):
+
+    return render(request, 'passgenerator.html')
 
 def tools(request):
 

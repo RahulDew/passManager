@@ -1,9 +1,11 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'messages.css' %}" />
 {% if messages %} {% for message in messages %}
 <div class="alert show" id="alert">
   {% if message.tags == "error" %}
-  <span class="uil uil-exclamation-circle"></span>
+  <span class="uil uil-exclamation-circle red"></span>
   {% else %}
-  <span class="uil uil-check-circle"></span>
+  <span class="uil uil-check-circle green"></span>
   {% endif %}
   <span class="msg">{{message}}</span>
   <div class="close-btn" id="close-btn">

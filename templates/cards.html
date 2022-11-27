@@ -35,23 +35,24 @@
     <div class="bottom">
       <hr class="h-line" />
       <div class="bottom-container">
-        <div class="card-num-container">
-          <div>Card Number:</div>
-          <div>{{card.card_number}}</div>
-        </div>
         <div class="exp-date-container">
           <div>Expiry Date:</div>
-          <div class="exp-date">
             <div>{{card.expiry_date}}</div>
+        </div>
+        <div class="card-num-container copy-item-container">
+          <div>Card Number:</div>
+          <div class="exp-date">
+            <div class="copy-item">{{card.card_number}}</div>
             <i class="uil uil-copy copy-icon"></i>
           </div>
         </div>
-        <div class="cvv-container">
-          <div>cvv:</div>
+        <div class="cvv-container copy-item-container">
+          <div>CVV:</div>
           <div class="cvv-con">
             <div class="cvv">
-              <p>{{card.key}}</p>
-              <i class="uil uil-eye-slash icon"></i>
+              <input type="password" id="passInput" value="{{card.key}}" disabled="disabled">
+              <div class="copy-item" hidden>{{card.key}}</div>
+              <i class="uil uil-eye-slash icon show-hide"></i>
             </div>
             <i class="uil uil-copy copy-icon"></i>
           </div>

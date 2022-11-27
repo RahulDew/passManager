@@ -40,7 +40,7 @@ class Card(models.Model):
     expiry_date = models.CharField(max_length=400) # and then it throw an error that int() ant assign that value
 
     def __str__(self):
-        return self.holder_name
+        return self.holder_name + " - " + self.bank_name
 
     class Meta:
         ordering = ["-id"]

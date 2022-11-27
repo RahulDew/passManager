@@ -11,6 +11,7 @@
   </head>
   <body>
     <div class="wrapper-container">
+      {% include 'messages.html' %}
       <div class="wrapper signup-wrapper">
         <h1>Sign Up</h1>
         <form action="/signup" role="form" method="POST">
@@ -28,7 +29,7 @@
           </button>
         </form>
         <div class="member">
-          Already a member? <a href="/login">Login here</a>
+          Already a User? <a href="/login">Login here</a>
         </div>
       </div>
     </div>
