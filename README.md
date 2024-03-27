@@ -1,7 +1,7 @@
-# Stasher - The Personal Drive
+# Abstractor The Password Manager
 ### Visit Demo - https://stasherdrive.netlify.app/
 
-## 
+## Securely manage diverse account credentials, personal card information, and notes while conducting comprehensive health assessments of my credentials for optimal security.
 
 ### Tech Used :
 #### Django -  A high-level Python web framework that enables rapid development of secure and maintainable websites.
